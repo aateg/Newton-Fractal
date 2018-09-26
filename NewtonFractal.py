@@ -6,7 +6,7 @@ Professor: Pedro Silva Peixoto
 Linguagem de Programacao: Python 3.6
 '''
 
-from math import cos, inf
+from math import cos
 
 def funcao_f(v):
     '''
@@ -111,6 +111,7 @@ amarelo = '255 255 0'
 laranja = '255 165 0'
 violeta = '159 95 159'
 
+inf = float("inf")
 
 x = open('fractal.ppm','w')
 x.write('P3\n800 800\n255')
@@ -204,12 +205,14 @@ def main():
             else:# obtemos uma raiz
                 raizExistente = False # assumimos que a raiz nao pertence a lista de raizes
                 for item in listaRaizes:
-                    if(modulo(subtrai(item,raiz_estimada)) < 10**(-2)):
+                    if(modulo(subtrai(item,raiz_estimada)) < 10**(-1)):
                         raiz_estimada =  item # trocamos o valor da raiz estimada
                         raizExistente = True # eh uma raiz já obtida.
                         break # se ja eh raiz existente nao eh necessario testar outras - isso interrompe o loop
 
-                if (not raizExistente): listaRaizes.append(raiz_estimada) # eh uma raiz nova. entao, coloco na lista
+                if (not raizExistente):
+                    if (len(listaRaizes) < 20): # limitamos o tamanho da lista de raízes
+                        listaRaizes.append(raiz_estimada) # eh uma raiz nova. entao, coloco na lista
 
                 if( verifica_se_e_raiz(x,y,listaRaizes) ): adiciona_pixel(branco)
                 else:
