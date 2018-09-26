@@ -165,6 +165,11 @@ def adiciona_pixel(cor):
     cor = '\n'+cor
     x.write(cor)
 
+def verifica_se_e_raiz(x,y,listaRaizes):
+    ponto = [x,y]
+    for item in listaRaizes:
+        if(modulo(subtrai(item,ponto)) < 10**(-3)): return True
+    
 
 def main():
     '''
@@ -185,6 +190,8 @@ def main():
             y = c + (d-c)*(j-1)/N
             raiz_estimada, IT = metodoNewton([x,y])
 
+   
+
             # esses casos sao os que saem do quadrado definido por [a,b]x[c,d] e portanto pintamos eles de preto
             if raiz_estimada[0]<a: IT=ITMAX + 1
             elif raiz_estimada[0]>b: IT=ITMAX + 1
@@ -197,15 +204,18 @@ def main():
             else:# obtemos uma raiz
                 raizExistente = False # assumimos que a raiz nao pertence a lista de raizes
                 for item in listaRaizes:
-                    if(modulo(subtrai(item,raiz_estimada)) < 10**(-5)):
+                    if(modulo(subtrai(item,raiz_estimada)) < 10**(-2)):
                         raiz_estimada =  item # trocamos o valor da raiz estimada
                         raizExistente = True # eh uma raiz já obtida.
                         break # se ja eh raiz existente nao eh necessario testar outras - isso interrompe o loop
 
                 if (not raizExistente): listaRaizes.append(raiz_estimada) # eh uma raiz nova. entao, coloco na lista
-                indiceCor = listaRaizes.index(raiz_estimada) # identifico qual a posicao na lista
-                adiciona_pixel(atribuiLambda(listaCores[indiceCor],IT)) # atribui a cor daquela posição no arquivo
 
+                if( verifica_se_e_raiz(x,y,listaRaizes) ): adiciona_pixel(branco)
+                else:
+                    indiceCor = listaRaizes.index(raiz_estimada) # identifico qual a posicao na lista
+                    adiciona_pixel(atribuiLambda(listaCores[indiceCor],IT)) # atribui a cor daquela posição no arquivo
+    print(len(listaRaizes))
 main() # executa a funcao principal
 
 x.close() # fecha o arquivo criado
