@@ -175,8 +175,13 @@ def verifica_se_e_raiz(x,y,listaRaizes):
     ponto = [x,y]
     for item in listaRaizes:
 <<<<<<< HEAD
+<<<<<<< HEAD
         if(modulo(subtrai(item,ponto)) < 10**(-1)): return True
 
+=======
+        if(modulo(subtrai(item,ponto)) < 10**(-3)): return True
+    
+>>>>>>> 1e82b09bd285837dec0b6e6f494c7dd193bda37f
 =======
         if(modulo(subtrai(item,ponto)) < 10**(-3)): return True
     
@@ -222,7 +227,12 @@ def main():
 
                 if (not raizExistente):
 <<<<<<< HEAD
+<<<<<<< HEAD
                     listaRaizes.append(raiz_estimada) # eh uma raiz nova. entao, coloco na lista
+=======
+                    if (len(listaRaizes) < 20): # limitamos o tamanho da lista de raízes
+                        listaRaizes.append(raiz_estimada) # eh uma raiz nova. entao, coloco na lista
+>>>>>>> 1e82b09bd285837dec0b6e6f494c7dd193bda37f
 =======
                     if (len(listaRaizes) < 20): # limitamos o tamanho da lista de raízes
                         listaRaizes.append(raiz_estimada) # eh uma raiz nova. entao, coloco na lista
@@ -233,7 +243,11 @@ def main():
                     indiceCor = listaRaizes.index(raiz_estimada) # identifico qual a posicao na lista
                     adiciona_pixel(atribuiLambda(listaCores[indiceCor],IT)) # atribui a cor daquela posição no arquivo
 <<<<<<< HEAD
+<<<<<<< HEAD
     print((listaRaizes))
+=======
+    print(len(listaRaizes))
+>>>>>>> 1e82b09bd285837dec0b6e6f494c7dd193bda37f
 =======
     print(len(listaRaizes))
 >>>>>>> 1e82b09bd285837dec0b6e6f494c7dd193bda37f
