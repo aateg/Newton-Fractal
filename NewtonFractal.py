@@ -6,7 +6,7 @@ Professor: Pedro Silva Peixoto
 Linguagem de Programacao: Python 3.6
 '''
 
-from math import cos, inf
+from math import cos
 
 def funcao_f(v):
     '''
@@ -57,16 +57,19 @@ def matrizDerivadas(v):
     del_g_del_y = (funcao_g([v[0],v[1]+h])-funcao_g([v[0],v[1]-h]))/(2*h)
     return [[del_f_del_x, del_f_del_y],[del_g_del_x, del_g_del_y]] # retorna matriz de derivadas parciais
 
-def inversa(matrix):
+def verificaDet(m):
+    det = m[0][0]*m[1][1] - m[0][1]*m[1][0] # determinante
+    if (det == 0):
+        return False
+    return True
+
+def inversa(m):
     '''
     Recebe matriz 2x2 e devolve a inversa dessa matriz se o determinante for
     diferente de zero. Caso o determinante seja zero a funcao retorna uma matriz
     com entradas infinitas.
     '''
-    m = matrix
-    det = m[0][0]*m[1][1] - m[0][1]*m[1][0] # determinante
-    if (det == 0):
-        return [[inf,inf],[inf,inf]]
+    det = m[0][0]*m[1][1] - m[0][1]*m[1][0]
     return [[m[1][1]/det,-m[0][1]/det],[-m[1][0]/det,m[0][0]/det]]
 
 def metodoNewton(v0):
@@ -77,13 +80,15 @@ def metodoNewton(v0):
     nao foi ultrapassado. Caso contrario retorna lista com dois elementos infinitos e numero de iteracoes.
     '''
     # seja v = x_{k+1} do metodo de newton
+    if(not verificaDet(matrizDerivadas(v0))): return v0,ITMAX+1
     i=0
     v = subtrai(v0,multMatrizes(inversa(matrizDerivadas(v0)),[funcao_f(v0),funcao_g(v0)]))
-    while(modulo(subtrai(v,v0))>tolerancia_epsilon and i < ITMAX):
+    while(modulo(subtrai(v,v0))>tolerancia_epsilon and i <= ITMAX):
         v0 = v
+        if(not verificaDet(matrizDerivadas(v0))): return v0,ITMAX+1
         v = subtrai(v0,multMatrizes(inversa(matrizDerivadas(v0)),[funcao_f(v0),funcao_g(v0)]))
         i = i + 1
-    if(i > ITMAX): return [inf,inf],i # temos que pensar aqui... que a saida da função aqui tem que ser um vetor que leva na cor preta
+    if(i > ITMAX): return v0,i # temos que pensar aqui... que a saida da função aqui tem que ser um vetor que leva na cor preta
     return v,i
 
 def atribuiLambda(corRGB,numIter):
@@ -111,6 +116,7 @@ amarelo = '255 255 0'
 laranja = '255 165 0'
 violeta = '159 95 159'
 
+inf = float("inf")
 
 x = open('fractal.ppm','w')
 x.write('P3\n800 800\n255')
@@ -165,6 +171,16 @@ def adiciona_pixel(cor):
     cor = '\n'+cor
     x.write(cor)
 
+def verifica_se_e_raiz(x,y,listaRaizes):
+    ponto = [x,y]
+    for item in listaRaizes:
+<<<<<<< HEAD
+        if(modulo(subtrai(item,ponto)) < 10**(-1)): return True
+
+=======
+        if(modulo(subtrai(item,ponto)) < 10**(-3)): return True
+    
+>>>>>>> 1e82b09bd285837dec0b6e6f494c7dd193bda37f
 
 def main():
     '''
@@ -177,13 +193,15 @@ def main():
     numero de iteracoes do metodo de Newton.
     '''
     listaRaizes = []
-    listaCores = [vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta,vermelho,verde,azul,amarelo,laranja,violeta]
-    for i in range(N):
-        for j in range(M):
+    listaCores = [vermelho,verde,azul,amarelo,laranja,violeta]
+    for j in range(1,N+1):
+        for i in range(1,M+1):
             # ponto (x,y) do plano [a,b]x[c,d]
             x = a + (b-a)*(i-1)/M
             y = c + (d-c)*(j-1)/N
             raiz_estimada, IT = metodoNewton([x,y])
+
+   
 
             # esses casos sao os que saem do quadrado definido por [a,b]x[c,d] e portanto pintamos eles de preto
             if raiz_estimada[0]<a: IT=ITMAX + 1
@@ -191,21 +209,34 @@ def main():
             elif raiz_estimada[1]<c: IT=ITMAX + 1
             elif raiz_estimada[1]>d: IT=ITMAX + 1
 
-            if (IT > ITMAX or modulo(raiz_estimada) == inf): # caso em que raiz obtida nao converge
+            if (IT > ITMAX): # caso em que raiz obtida nao converge
                 adiciona_pixel(preto)
 
             else:# obtemos uma raiz
                 raizExistente = False # assumimos que a raiz nao pertence a lista de raizes
                 for item in listaRaizes:
-                    if(modulo(subtrai(item,raiz_estimada)) < 10**(-5)):
+                    if(modulo(subtrai(item,raiz_estimada)) < 10**(-1)):
                         raiz_estimada =  item # trocamos o valor da raiz estimada
                         raizExistente = True # eh uma raiz já obtida.
                         break # se ja eh raiz existente nao eh necessario testar outras - isso interrompe o loop
 
-                if (not raizExistente): listaRaizes.append(raiz_estimada) # eh uma raiz nova. entao, coloco na lista
-                indiceCor = listaRaizes.index(raiz_estimada) # identifico qual a posicao na lista
-                adiciona_pixel(atribuiLambda(listaCores[indiceCor],IT)) # atribui a cor daquela posição no arquivo
+                if (not raizExistente):
+<<<<<<< HEAD
+                    listaRaizes.append(raiz_estimada) # eh uma raiz nova. entao, coloco na lista
+=======
+                    if (len(listaRaizes) < 20): # limitamos o tamanho da lista de raízes
+                        listaRaizes.append(raiz_estimada) # eh uma raiz nova. entao, coloco na lista
+>>>>>>> 1e82b09bd285837dec0b6e6f494c7dd193bda37f
 
+                if( verifica_se_e_raiz(x,y,listaRaizes) ): adiciona_pixel(branco)
+                else:
+                    indiceCor = listaRaizes.index(raiz_estimada) # identifico qual a posicao na lista
+                    adiciona_pixel(atribuiLambda(listaCores[indiceCor],IT)) # atribui a cor daquela posição no arquivo
+<<<<<<< HEAD
+    print((listaRaizes))
+=======
+    print(len(listaRaizes))
+>>>>>>> 1e82b09bd285837dec0b6e6f494c7dd193bda37f
 main() # executa a funcao principal
 
 x.close() # fecha o arquivo criado
