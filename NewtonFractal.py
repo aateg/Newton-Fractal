@@ -116,7 +116,6 @@ amarelo = '255 255 0'
 laranja = '255 165 0'
 violeta = '159 95 159'
 
-inf = float("inf")
 
 x = open('fractal.ppm','w')
 x.write('P3\n800 800\n255')
@@ -174,18 +173,8 @@ def adiciona_pixel(cor):
 def verifica_se_e_raiz(x,y,listaRaizes):
     ponto = [x,y]
     for item in listaRaizes:
-<<<<<<< HEAD
-<<<<<<< HEAD
         if(modulo(subtrai(item,ponto)) < 10**(-1)): return True
 
-=======
-        if(modulo(subtrai(item,ponto)) < 10**(-3)): return True
-    
->>>>>>> 1e82b09bd285837dec0b6e6f494c7dd193bda37f
-=======
-        if(modulo(subtrai(item,ponto)) < 10**(-3)): return True
-    
->>>>>>> 1e82b09bd285837dec0b6e6f494c7dd193bda37f
 
 def main():
     '''
@@ -206,8 +195,6 @@ def main():
             y = c + (d-c)*(j-1)/N
             raiz_estimada, IT = metodoNewton([x,y])
 
-   
-
             # esses casos sao os que saem do quadrado definido por [a,b]x[c,d] e portanto pintamos eles de preto
             if raiz_estimada[0]<a: IT=ITMAX + 1
             elif raiz_estimada[0]>b: IT=ITMAX + 1
@@ -226,31 +213,13 @@ def main():
                         break # se ja eh raiz existente nao eh necessario testar outras - isso interrompe o loop
 
                 if (not raizExistente):
-<<<<<<< HEAD
-<<<<<<< HEAD
                     listaRaizes.append(raiz_estimada) # eh uma raiz nova. entao, coloco na lista
-=======
-                    if (len(listaRaizes) < 20): # limitamos o tamanho da lista de raízes
-                        listaRaizes.append(raiz_estimada) # eh uma raiz nova. entao, coloco na lista
->>>>>>> 1e82b09bd285837dec0b6e6f494c7dd193bda37f
-=======
-                    if (len(listaRaizes) < 20): # limitamos o tamanho da lista de raízes
-                        listaRaizes.append(raiz_estimada) # eh uma raiz nova. entao, coloco na lista
->>>>>>> 1e82b09bd285837dec0b6e6f494c7dd193bda37f
 
                 if( verifica_se_e_raiz(x,y,listaRaizes) ): adiciona_pixel(branco)
                 else:
                     indiceCor = listaRaizes.index(raiz_estimada) # identifico qual a posicao na lista
                     adiciona_pixel(atribuiLambda(listaCores[indiceCor],IT)) # atribui a cor daquela posição no arquivo
-<<<<<<< HEAD
-<<<<<<< HEAD
     print((listaRaizes))
-=======
-    print(len(listaRaizes))
->>>>>>> 1e82b09bd285837dec0b6e6f494c7dd193bda37f
-=======
-    print(len(listaRaizes))
->>>>>>> 1e82b09bd285837dec0b6e6f494c7dd193bda37f
 main() # executa a funcao principal
 
 x.close() # fecha o arquivo criado
