@@ -1,10 +1,3 @@
-'''
-Exercicio programa 1 - Fundamentos de analise numerica
-Instituto de Matematica e Estatistica - USP
-Autores: Guilherme Fernandes G. Silva (NUSP: 10297272) e Victor Yuji Shimabukuro (NUSP: )
-Professor: Pedro Silva Peixoto
-Linguagem de Programacao: Python 3.6
-'''
 
 from math import cos
 
@@ -58,6 +51,11 @@ def matrizDerivadas(v):
     return [[del_f_del_x, del_f_del_y],[del_g_del_x, del_g_del_y]] # retorna matriz de derivadas parciais
 
 def verificaDet(m):
+    """
+    recebe matriz e retorna valor booleano.
+    Se determinante da matriz de entrada eh zero retorna False,
+    caso contrario retorna True.
+    """
     det = m[0][0]*m[1][1] - m[0][1]*m[1][0] # determinante
     if (det == 0):
         return False
@@ -65,9 +63,9 @@ def verificaDet(m):
 
 def inversa(m):
     '''
-    Recebe matriz 2x2 e devolve a inversa dessa matriz se o determinante for
-    diferente de zero. Caso o determinante seja zero a funcao retorna uma matriz
-    com entradas infinitas.
+    Recebe matriz 2x2 e retorna a inversa dessa matriz.
+    Somente usamos essa funcao apos verificar se determinante
+    eh diferente de zero.
     '''
     det = m[0][0]*m[1][1] - m[0][1]*m[1][0]
     return [[m[1][1]/det,-m[0][1]/det],[-m[1][0]/det,m[0][0]/det]]
@@ -75,21 +73,21 @@ def inversa(m):
 def metodoNewton(v0):
     '''
     Essa funcao realiza o metodo de Newton 2D com relacao a um sistema de funcoes
-    previamente determinados f(x)=0 e g(x)=0. Recebe uma lista com dois elementos e retorna a solucao
-    do sistema linear e o numero de iteracoes se o metodo de Newton converge e se o numero de iterações maxima
-    nao foi ultrapassado. Caso contrario retorna lista com dois elementos infinitos e numero de iteracoes.
+    previamente determinados f(x,y)=0 e g(x,y)=0. Recebe uma lista com dois elementos e retorna a solucao
+    do sistema linear e o numero de iteracoes se o metodo de Newton converge, se o numero de iterações maxima
+    nao foi ultrapassado e se o determinante da matriz de derivadas for diferente de zero.
+    Caso contrario retorna lista com dois elementos obtidos e numero de iteracoes.
     '''
-    # seja v = x_{k+1} do metodo de newton
-    if(not verificaDet(matrizDerivadas(v0))): return v0,ITMAX+1
+    if(not verificaDet(matrizDerivadas(v0))): return v0,ITMAX+1 # teste determinante = 0
     i=0
     v = subtrai(v0,multMatrizes(inversa(matrizDerivadas(v0)),[funcao_f(v0),funcao_g(v0)]))
-    while(modulo(subtrai(v,v0))>tolerancia_epsilon and i <= ITMAX):
+    while(modulo(subtrai(v,v0))>tolerancia_epsilon and i <= ITMAX): # enquanto nao converge e o ITMAX nao foi ultrapassado
         v0 = v
-        if(not verificaDet(matrizDerivadas(v0))): return v0,ITMAX+1
-        v = subtrai(v0,multMatrizes(inversa(matrizDerivadas(v0)),[funcao_f(v0),funcao_g(v0)]))
+        if(not verificaDet(matrizDerivadas(v0))): return v0,ITMAX+1 # teste determinante = 0
+        v = subtrai(v0,multMatrizes(inversa(matrizDerivadas(v0)),[funcao_f(v0),funcao_g(v0)])) # obtemos proximo candidato
         i = i + 1
     if(i > ITMAX): return v0,i # temos que pensar aqui... que a saida da função aqui tem que ser um vetor que leva na cor preta
-    return v,i
+    return v,i # significa que obtemos raiz com numero de iteracoes menor que ITMAX
 
 def atribuiLambda(corRGB,numIter):
     '''
@@ -103,6 +101,17 @@ def atribuiLambda(corRGB,numIter):
         lista[k] = round(int(lista[k])*fator)
         lista[k] =  str(lista[k])
     return ' '.join(lista)
+
+def verifica_se_e_raiz(x,y,listaRaizes):
+    """
+    Recebe a lista mais recente de raizes e  verifica se o ponto analisado
+    eh uma das raizes (isso eh feito verificando se a distancia entre eles
+    eh menor que um valor definido 0.01). 
+    """
+    ponto = [x,y]
+    for item in listaRaizes:
+        if(modulo(subtrai(item,ponto)) < 10**(-2)): return True
+
 
 
 #variaveis globais
@@ -170,11 +179,6 @@ def adiciona_pixel(cor):
     cor = '\n'+cor
     x.write(cor)
 
-def verifica_se_e_raiz(x,y,listaRaizes):
-    ponto = [x,y]
-    for item in listaRaizes:
-        if(modulo(subtrai(item,ponto)) < 10**(-1)): return True
-
 
 def main():
     '''
@@ -188,7 +192,7 @@ def main():
     '''
     listaRaizes = []
     listaCores = [vermelho,verde,azul,amarelo,laranja,violeta]
-    for j in range(1,N+1):
+    for j in range(N,0,-1):
         for i in range(1,M+1):
             # ponto (x,y) do plano [a,b]x[c,d]
             x = a + (b-a)*(i-1)/M
@@ -201,6 +205,7 @@ def main():
             elif raiz_estimada[1]<c: IT=ITMAX + 1
             elif raiz_estimada[1]>d: IT=ITMAX + 1
 
+            # Perceba que para verificar se eh raiz, somente testamos o numero de iteracoes
             if (IT > ITMAX): # caso em que raiz obtida nao converge
                 adiciona_pixel(preto)
 
@@ -215,11 +220,16 @@ def main():
                 if (not raizExistente):
                     listaRaizes.append(raiz_estimada) # eh uma raiz nova. entao, coloco na lista
 
-                if( verifica_se_e_raiz(x,y,listaRaizes) ): adiciona_pixel(branco)
+                if( verifica_se_e_raiz(x,y,listaRaizes) ): adiciona_pixel(branco) # verifica 
                 else:
                     indiceCor = listaRaizes.index(raiz_estimada) # identifico qual a posicao na lista
                     adiciona_pixel(atribuiLambda(listaCores[indiceCor],IT)) # atribui a cor daquela posição no arquivo
-    print((listaRaizes))
+    #print((listaRaizes))
+    print("Guilherme Fernandes G. Silva (NUSP: 10297272)\nVictor Yuji Shimabukuro (NUSP: 9876150)")
+    print("Raiz | Cor")
+    for index in range(len(listaRaizes)):
+        cores = ['vermelho','verde','azul','amarelo','laranja','violeta']
+        print(listaRaizes[index], "|", cores[index])
 main() # executa a funcao principal
 
 x.close() # fecha o arquivo criado
